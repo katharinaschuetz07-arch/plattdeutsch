@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="nds">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>PlattSnack Premium</title>
+    <style>
+        :root {
+            --meck-blue: #1e40af;
+            --meck-sky: #f0f9ff;
+            --btn-light: #ffffff;
+            --btn-border: #bae6fd;
+        }
+
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--meck-sky);
+            color: #1e293b; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100dvh; 
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 10px 15px;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            flex-shrink: 0;
+            padding-bottom: 5px;
+        }
+        .main-title {
+            color: var(--meck-blue);
+            font-weight: 900;
+            font-size: 2.4rem;
+            line-height: 1;
+            text-transform: uppercase;
+            font-style: italic;
+            letter-spacing: -0.05em;
+        }
+        .subtitle {
+            font-size: 9px;
+            color: #0284c7;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-top: 4px;
+        }
+
+        /* GRID SYSTEM FÜR BUTTONS (NEBENEINANDER) */
+        .btn-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        .app-btn {
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .nav-top-btn {
+            background-color: var(--btn-light);
+            border: 2px solid var(--btn-border);
+            color: var(--meck-blue);
+        }
+
+        .nav-top-btn.active {
+            background-color: var(--meck-blue);
+            border-color: var(--meck-blue);
+            color: #ffffff;
+        }
+
+        /* HAUPTBEREICH */
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .info-card {
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 15px rgba(30, 64, 175, 0.05);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .bottom-nav-btn {
+            background-color: var(--meck-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 0 #172554;
+        }
+        
+        .bottom-nav-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #172554;
+        }
+
+        .menu-btn {
+            background-color: #ffffff;
+            color: var(--meck-blue);
+            border: 2px solid var(--btn-border);
+            box-shadow: 0 4px 0 var(--btn-border);
+        }
+
+        .platt-text {
+            color: var(--meck-blue);
+            font-weight: 900;
+            font-size: 2.4rem;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+
+        .translation-text {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .counter {
+            font-size: 10px;
+            color: #bae6fd;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .divider {
+            height: 4px;
+            width: 40px;
+            background-color: #fbbf24;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .hidden { display: none !important; }
+
+        footer {
+            font-size: 10px;
+            color: #64748b;
+            text-align: center;
+            padding-top: 10px;
+            font-weight: 600;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+
+        .home-quote-box {
+            background-color: #f8fafc;
+            border: 2px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 15px;
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body onload="showRandomQuote()">
+
+    <header>
+        <h1 class="main-title">PlattSnack för di</h1>
+        <p class="subtitle">Premium Edition</p>
+        <p class="subtitle">Version 1.2.9</p>
+    </header>
+
+    <div class="btn-row">
+        <button onclick="setCategory('vokabeln')" id="btn-vokabeln" class="app-btn nav-top-btn">Vokabeln</button>
+        <button onclick="setCategory('alltag')" id="btn-alltag" class="app-btn nav-top-btn">Alltag</button>
+        <button onclick="setCategory('basis')" id="btn-basis" class="app-btn nav-top-btn">Basis</button>
+    </div>
+
+    <main>
+        <div id="home-screen" class="info-card">
+            <h2 style="font-size: 1.5rem; color: #1e3a8a; margin-bottom: 5px; font-style: italic;">Moin, Moin!</h2>
+            <p style="font-size: 11px; color: #38bdf8; font-weight: 800; text-transform: uppercase; margin-bottom: 15px;">"Wat mutt, dat mutt."</p>
+            <div class="home-quote-box" onclick="showRandomQuote()">
+                <p id="home-quote-platt" style="font-size: 1.2rem; font-weight: 800; color: #1e40af;"></p>
+                <p id="home-quote-de" style="font-size: 0.8rem; color: #94a3b8; font-style: italic;"></p>
+            </div>
+        </div>
+
+        <div id="learning-screen" class="info-card hidden" onclick="changePhrase(1)">
+            <div id="counter" class="counter"></div>
+            <h2 id="phrase-platt" class="platt-text"></h2>
+            <div class="divider"></div>
+            <p id="phrase-de" class="translation-text"></p>
+        </div>
+    </main>
+
+    <div class="btn-row">
+        <button onclick="changePhrase(-1)" class="app-btn bottom-nav-btn">Terüch</button>
+        <button onclick="goHome()" class="app-btn menu-btn">Menü</button>
+        <button onclick="changePhrase(1)" class="app-btn bottom-nav-btn">Wieder</button>
+    </div>
+
+    <footer>
+        (c) Lern-App für Mecklenburger und ihre Nachkommen<br>
+        <span style="opacity: 0.6;">Premium Edition för di// V 1.2.9</span>
+    </footer>
+
+    <script>
+        const quotes = [
+            { platt: "Nich lang schnacken, Kopp in'n Nacken!", de: "Nicht lang reden, austrinken!" },
+            { platt: "Dat löppt sik allens torecht.", de: "Das wird schon alles wieder." },
+            { platt: "Holl di fuchtig!", de: "Bleib munter und gesund!" },
+            { platt: "Moin is moin!", de: "Moin reicht als Begrüßung!" },
+            { platt: "Eerstmal een lütten Klötenköm, denn süht de Welt bäter ut!", de: "Erstmal einen Eierlikör, dann sieht die Welt besser aus!" },
+            { platt: "Fischsupp mutt swemmen – an't besten in een Schnaps.", de: "Fischsuppe muss schwimmen – am besten in einem Schnaps." },
+            { platt: "Sööt as Klötenköm un scharp as de See!", de: "Süß wie Eierlikör und scharf wie die See!" },
+            { platt: "Bi Fischsupp snackt man nich, dor genit man.", de: "Bei Fischsuppe redet man nicht, da genießt man." },
+            { platt: "Een Glas Klötenköm is gaud för de Stimmung!", de: "Ein Glas Eierlikör ist gut für die Stimmung!" },
+            { platt: "Vun nix kummt nix.", de: "Von nichts kommt nichts." },
+            { platt: "Dat hebbt wi jümmers so mookt.", de: "Das haben wir schon immer so gemacht." },
+            { platt: "Nich lang fackeln, mooken!", de: "Nicht lange zögern, machen!" },
+            { platt: "Eerst de Arbeit, denn dat Vergnögen.", de: "Erst die Arbeit, dann das Vergnügen." },
+            { platt: "Snack keen Schiet.", de: "Erzähl keinen Unsinn." },
+            { platt: "Lütt un lütt mookt ok Mist.", de: "Kleinvieh macht auch Mist." },
+            { platt: "De Klüger gifft na.", de: "Der Klügere gibt nach." },
+            { platt: "He lügt, dat sik de Balken böögt.", de: "Er lügt, dass sich die Balken biegen." },
+            { platt: "In de Roh liggt de Kraft.", de: "In der Ruhe liegt die Kraft." },
+            { platt: "Beter een Spatz in de Hand.", de: "Besser ein Spatz in der Hand." }
+        ];
+
+        const datenbank = {
+            vokabeln: [
+                { platt: "Dat is för di min Deern", de: "Das ist für dich, mein Mädchen" }, 
+			{ platt: "Dat is för di min Jung", de: "Das ist für dich, mein Junge" },
+
+                { platt: "De Deern", de: "Das Mädchen" }, { platt: "De Jung", de: "Der Junge" },
+                { platt: "De Hecht", de: "Der Hecht" }, { platt: "De Klock", de: "Die Uhr / Glocke" },
+                { platt: "Dat Schipp", de: "Das Schiff" }, { platt: "De Haven", de: "Der Hafen" },
+                { platt: "De Mööv", de: "Die Möwe" }, { platt: "De Fisch", de: "Der Fisch" },
+                { platt: "De Trecker", de: "Der Traktor" }, { platt: "De Snut", de: "Mund / Schnauze" },
+                { platt: "De Büx", de: "Die Hose" }, { platt: "Dat Huus", de: "Das Haus" },
+                { platt: "De Goos", de: "Die Gans" }, { platt: "De Tuun", de: "Der Zaun" },
+                { platt: "De Appel", de: "Der Apfel" }, { platt: "De Boom", de: "Der Baum" },
+                { platt: "Dat Water", de: "Das Wasser" }, { platt: "De Eierkeuk", de: "Der Pfannkuchen" }
+            ],
+            alltag: [
+                { platt: "Wo laat is dat?", de: "Wie spät ist es?" },
+                { platt: "Ik hebb Hunger.", de: "Ich habe Hunger." },
+                { platt: "Wo geit di dat?", de: "Wie geht es dir?" },
+                { platt: "Dat is bannig schöön.", de: "Das ist sehr schön." },
+                { platt: "Holl di stief!", de: "Bleib gesund!" },
+                { platt: "Allens klar!", de: "Alles klar!" },
+                { platt: "Wat gifft dat Neies?", de: "Was gibt es Neues?" },
+                { platt: "Kumm mal her!", de: "Komm mal her!" },
+                { platt: "Snack nich so'n Tüddelkram!", de: "Red keinen Unsinn!" },
+                { platt: "Sett di daal.", de: "Setz dich hin." },
+                { platt: "Ik mutt los.", de: "Ich muss los." },
+                { platt: "Passt so.", de: "Das passt so." },
+                { platt: "Schietwedder!", de: "Schlechtes Wetter!" },
+                { platt: "Ik bün mööd.", de: "Ich bin müde." },
+                { platt: "Mook de Döör to.", de: "Mach die Tür zu." },
+                { platt: "Kannst mi hölpen?", de: "Kannst du mir helfen?" },
+                { platt: "Dat freit mi.", de: "Das freut mich." },
+                { platt: "Eerstmal een lütten Klötenköm!", de: "Erstmal einen kleinen Eierlikör!" },
+                { platt: "De Fischsupp mutt swemmen.", de: "Die Fischsuppe muss schwimmen." },
+                { platt: "Klötenköm ut dat Schokoglas.", de: "Eierlikör aus dem Schokoladenglas." },
+                { platt: "Mien Mudding mookt de beste Fischsupp.", de: "Meine Mutter macht die beste Fischsuppe." },
+                { platt: "Een Lüttjen hölpt jümmers.", de: "Ein Kleiner (Schnaps) hilft immer." },
+                { platt: "Fisch mutt swemmen!", de: "Fisch muss schwimmen (dazu trinken)!" },
+                { platt: "Botter bi de Fische!", de: "Butter bei die Fische (Klartext reden)!" },
+                { platt: "Sööt as Klötenköm.", de: "Süß wie Eierlikör." },
+                { platt: "Liek ut de Panne eten.", de: "Direkt aus der Pfanne essen." },
+                { platt: "Nu gifft dat Eten!", de: "Jetzt gibt es Essen!" },
+                { platt: "Ik weet dat nich.", de: "Ich weiß das nicht." }
+            ],
+            basis: [
+                { platt: "Moin!", de: "Hallo" },
+                { platt: "Jo / Nee", de: "Ja / Nein" },
+                { platt: "Danke ok!", de: "Vielen Dank!" },
+                { platt: "Nich dorför!", de: "Gern geschehen!" },
+                { platt: "Slaap goot!", de: "Schlaf gut!" },
+                { platt: "Munter blieven!", de: "Munter bleiben!" },
+                { platt: "Holl di stramm!", de: "Halt dich wacker!" },
+                { platt: "Tschüß ok!", de: "Tschüss auch!" },
+                { platt: "Bet anner Mal!", de: "Bis zum nächsten Mal!" },
+                { platt: "Moin Moin!", de: "Längere Begrüßung" },
+                { platt: "Gooten Dag!", de: "Guten Tag!" },
+                { platt: "Adschüß!", de: "Auf Wiedersehen!" },
+                { platt: "Wie heitst du?", de: "Wie heißt du?" },
+                { platt: "Ik bün Katharina!", de: "Ich bin Katharina!" },
+                { platt: "Ik bün Nathalie.", de: "Ich bin Nathalie." },
+                { platt: "Ik bün Marco.", de: "Ich bin Marco." },
+		      { platt: "Hör mal to: Ik bün dien Mudding!", de: "Hör mal zu: Ich bin deine Mutter!" },
+			 { platt: "Eerstmal een lütten Klötenköm!", de: "Erstmal einen kleinen Eierlikör!" },
+
+
+                { platt: "An't Enn löppt sie dat Allens torecht.", de: "Am Ende läuft sich das alles zurecht." },
+                { platt: "An't Enn warrt allens goot.", de: "Am Ende wird alles gut." },
+                { platt: "Kiek mal in.", de: "Schau mal vorbei." },
+                { platt: "Liekut!", de: "Geradeaus!" },
+                { platt: "Sachtens!", de: "Vorsichtig / Langsam!" }
+            ]
+        };
+
+        let currentCat = null;
+        let currentIndex = 0;
+
+        function showRandomQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('home-quote-platt').innerText = randomQuote.platt;
+            document.getElementById('home-quote-de').innerText = "(" + randomQuote.de + ")";
+            playAudio(randomQuote.platt);
+        }
+
+        function setCategory(cat) {
+            currentCat = cat;
+            currentIndex = 0;
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('learning-screen').classList.remove('hidden');
+            document.querySelectorAll('.nav-top-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + cat).classList.add('active');
+            updateUI();
+        }
+
+        function changePhrase(dir) {
+            if (!currentCat) return;
+            const list = datenbank[currentCat];
+            currentIndex += dir;
+            if (currentIndex < 0) currentIndex = list.length - 1;
+            if (currentIndex >= list.length) currentIndex = 0;
+            updateUI();
+        }
+
+        function updateUI() {
+            const item = datenbank[currentCat][currentIndex];
+            document.getElementById('phrase-platt').innerText = item.platt;
+            document.getElementById('phrase-de').innerText = item.de;
+            document.getElementById('counter').innerText = `${currentCat} : ${currentIndex + 1} / ${datenbank[currentCat].length}`;
+            playAudio(item.platt);
+        }
+
+        function playAudio(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = window.speechSynthesis.getVoices();
+            const maleVoice = voices.find(v => (v.lang.startsWith('de')) && (v.name.toLowerCase().includes('stefan') || v.name.toLowerCase().includes('male')));
+            if (maleVoice) utterance.voice = maleVoice;
+            utterance.lang = 'de-DE';
+            utterance.rate = 0.65;
+            utterance.pitch = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function goHome() {
+            currentCat = null;
+            document.getElementById('home-screen').classList.remove('hidden');
+            document.getElementById('learning-screen').classList.add('hidden');
+            document.querySelectorAll('.nav-top-btn').forEach(b => b.classList.remove('active'));
+            showRandomQuote();
+        }
+    </script>
+</body>
+</html>
